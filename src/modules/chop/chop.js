@@ -23,10 +23,10 @@ function getIndexFromArray(array, numberToFind, indexAccumulator = 0) {
 }
 
 export default function chop(numberToFind, array) {
-  const arraySize = array.length;
+  const arrayLength = array.length;
 
   // handle empty array
-  if (arraySize === 0) {
+  if (arrayLength === 0) {
     return -1;
   }
 
@@ -37,11 +37,11 @@ export default function chop(numberToFind, array) {
   }
 
   // handle the last index
-  if ((array[array.length - 1]) === numberToFind) {
-    return array.length - 1;
+  if ((array[arrayLength - 1]) === numberToFind) {
+    return arrayLength - 1;
   }
 
-  const halfArrayLength = (Math.ceil(array.length / 2) - 1);
+  const halfArrayLength = (Math.ceil(arrayLength / 2) - 1);
   const lastNumFromHalf = array[halfArrayLength];
 
   if (lastNumFromHalf === numberToFind) {
