@@ -10,33 +10,51 @@
 // Implement a binary search routine (using the specification below)
 // in the language and technique of your choice.
 
-export default function chop(numberToFind, array) {
-  const arraySize = array.length;
-
-  if (!arraySize) {
-    return -1;
-  }
-
-  const half = Math.ceil(array.length / 2);    
-  const firstHalf = array.slice(0, half);
-
-  for (let index = 0; index < firstHalf.length; index++) {
-    const number = firstHalf[index];
+function getIndexFromArray(array, numberToFind, indexAccumulator = 0) {
+  for (let index = 0; index < array.length; index++) {
+    const number = array[index];
 
     if (number == numberToFind) {
-      return index;
-    }
-  }
-
-  const secondHalf = array.slice(half)
-
-  for (let index = 0; index < secondHalf.length; index++) {
-    const number = secondHalf[index];
-
-    if (number == numberToFind) {
-      return index + firstHalf.length;
+      return index + indexAccumulator;
     }
   }
 
   return -1;
+}
+
+export default function chop(numberToFind, array) {
+  const arraySize = array.length;
+
+  // handle empty array
+  if (arraySize === 0) {
+    return -1;
+  }
+
+  // do simple comparisons before we even attempt array logic for performance
+  // handle the first index
+  if (array[0] === numberToFind) {
+    return 0;
+  }
+
+  // handle the last index
+  if ((array[array.length - 1]) === numberToFind) {
+    return array.length - 1;
+  }
+
+  const halfArrayLength = (Math.ceil(array.length / 2) - 1);
+  const lastNumFromHalf = array[halfArrayLength];
+
+  if (lastNumFromHalf === numberToFind) {
+    return halfArrayLength;
+  }
+  
+  if (lastNumFromHalf > numberToFind) {
+    return getIndexFromArray(array.slice(0, halfArrayLength), numberToFind)
+  }
+
+  return getIndexFromArray(
+    array.slice(halfArrayLength),
+    numberToFind,
+    halfArrayLength // 3rd parameter is the index accumulator
+  );
 }
