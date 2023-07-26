@@ -29,8 +29,25 @@ describe('chop', () => {
     expect(chop(1, [1,2,6,8,9,10])).toBe(0);
   });
 
-  test('can chop BIG arrays', () => {
-    const array = Array.from(Array(500).keys())
-    expect(chop(326, array)).toBe(326);
+  test('can chop BIG arrays benchmark', () => {
+    const maximumOperationTime = 50; // 50ms to go through 10,000,000 > 11,000,000 items and find the index
+
+    const min = Math.ceil(10000000);
+    const max = Math.floor(11000000);
+
+    // cached array indexes can skew this result, random between 10 million and 11 million ^
+    const randomNumber = Math.floor(Math.random() * (max - min) + min);
+    const array = Array.from(Array(randomNumber).keys())
+
+    // we don't test the time of the generation of the 10 million records, just the performance of the function
+    var start = new Date()
+
+    const doChop = chop(6628020, array);
+    expect(doChop).toBe(6628020);
+
+    var end = new Date();
+
+    const benchmarkTime = (end.getTime() - start.getTime());
+    expect(benchmarkTime).toBeLessThanOrEqual(maximumOperationTime);
   });
 });
